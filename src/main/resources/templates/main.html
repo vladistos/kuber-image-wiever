@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('select');
+                var instances = M.FormSelect.init(elems);
+            });
+        </script>
+
+        <style>
+            a {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .alert {
+              padding: 20px;
+              background-color: #f44336;
+              color: white;
+              margin-bottom: 15px;
+            }
+
+            .alert.warn {
+                background-color: #ff9800;
+            }
+
+            .alert.success {
+                background-color: #04AA6D;
+            }
+
+            .closebtn {
+              margin-left: 15px;
+              color: white;
+              font-weight: bold;
+              float: right;
+              font-size: 22px;
+              line-height: 20px;
+              cursor: pointer;
+              transition: 0.3s;
+            }
+
+            .closebtn:hover {
+              color: black;
+            }
+
+            .row .col.s3.btn-container {
+                width: 24.8%;
+                margin-left: 0.2%;
+                padding: 0px;
+                border: none;
+            }
+
+            .btn-container .btn {
+                margin-top: 3px;
+            }
+
+            .collection a.collection-item{
+                padding:0;
+            }
+
+            .collection a.collection-item.disabled {
+              pointer-events: none;
+              cursor: default;
+              text-decoration: none;
+              color: black;
+            }
+        </style>
+
+        <title>Images</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+
+    <nav>
+        <div class="nav-wrapper green">
+            <a href="#" class="brand-logo">Список образов</a>
+        </div>
+    </nav>
+    <body>
+
+    <div class="section">
+        <div th:each="alert : ${alertList}" th:classappend="${alert.type.classname}" class="alert">
+            <th:block th:text="${alert.message}"/>
+            <i class="closebtn material-icons" onclick="this.parentElement.style.display='none';">close</i>
+        </div>
+    </div>
+
+    <div class="section">
+
+        <div class="row">
+
+            <div class="input-field col s3 offset-s9">
+                <select id="namespace-select">
+                    <option value="all" th:selected="${namespace == all}">Все</option>
+                    <option th:each="namespace1 : ${namespaceList}" th:text="${namespace1}" th:value="${namespace1}" th:selected="${namespace1 == namespace}"/>
+                </select>
+                <label>Пространство имён</label>
+            </div>
+
+            <div class="collection col s3 btn-container" th:each="i0 : ${#numbers.sequence(0, 3)}">
+                <a class="collection-item black-text" th:each="image, i1 : ${images}" th:href="${image.link}" th:text="${image.imageShow}"
+                   th:classappend="${!image.isAllowed} ? disabled" th:if="${i1.index % 4 == i0}"/>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+            $("#namespace-select").on('change', function() {
+                window.location.href = location.protocol + '//' + location.host + location.pathname + '?namespace=' + this.value;
+            });
+        </script>
+
+    </body>
+</html>
